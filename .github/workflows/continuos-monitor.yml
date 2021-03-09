@@ -27,7 +27,7 @@ jobs:
       - name: Publish metrics on pulling an image
         run: |
           if [[ "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest> /dev/null)" == "" ]]; then
-            aws cloudwatch put-metric-data --metric-name PullImageFromECRSuccess --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
+            aws cloudwatch put-metric-data --metric-name PullImageFromECRFailure --dimensions result=pass/fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
           else
-            aws cloudwatch put-metric-data --metric-name PullImageFromECRSuccess --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
+            aws cloudwatch put-metric-data --metric-name PullImageFromECRFailure --dimensions result=pass/fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
           fi
