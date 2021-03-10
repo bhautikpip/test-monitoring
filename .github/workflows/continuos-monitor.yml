@@ -1,7 +1,7 @@
 name: Continuous Monitoring of Dockerhub and Public ECR
-on: push
-#  schedule:
-#    - cron: "*/5 * * * *"
+on:
+  schedule:
+    - cron: "*/5 * * * *"
 
 jobs:
   monitor-ecr:
@@ -36,7 +36,7 @@ jobs:
           fi
 
       - name: Run daemon image
-        run: docker run public.ecr.aws/xray/aws-xray-daemon:latest -n us-west-2 &
+        run: docker run --name xray-daemon public.ecr.aws/xray/aws-xray-daemon:latest -n us-west-2 &
 
       - name: Sleep for 30 seconds
         uses: jakejarvis/wait-action@master
@@ -45,7 +45,7 @@ jobs:
 
       - name: Publish metrics on daemon startup
         run: |
-          if [[ "$(docker container inspect -f '{{.State.Status}}' public.ecr.aws/xray/aws-xray-daemon:latest )" != "running" ]]; then
+          if [[ "$(docker container inspect -f '{{.State.Status}}' xray-daemon )" != "running" ]]; then
             aws cloudwatch put-metric-data --metric-name DaemonImageStartupFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
           else
             aws cloudwatch put-metric-data --metric-name DaemonImageStartupFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
