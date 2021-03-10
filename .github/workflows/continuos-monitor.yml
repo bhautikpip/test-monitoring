@@ -29,7 +29,8 @@ jobs:
       - name: debug
         run: |
           docker images
-          echo $("$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest11> /dev/null)")
+          echo "hi"
+          echo "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest11> /dev/null)"
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
