@@ -32,6 +32,5 @@ jobs:
           if [[ "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest11> /dev/null)" == "" ]]; then
             aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
           else
-            echo "hi!"
             aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
           fi
