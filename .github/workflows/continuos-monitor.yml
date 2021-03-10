@@ -1,7 +1,7 @@
 name: Continuous Monitoring of Dockerhub and Public ECR
-on:
-  schedule:
-    - cron: "*/5 * * * *"
+on: push
+#  schedule:
+#    - cron: "*/5 * * * *"
 
 jobs:
   monitor-ecr:
@@ -24,12 +24,13 @@ jobs:
       - name: Authenticate and pull an image from public ECR
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-          docker pull public.ecr.aws/xray/aws-xray-daemon:latest
+          docker pull public.ecr.aws/xray/aws-xray-daemon:latest530
 
       - name: Publish metrics on pulling an image
+        if: ${{ always() }}
         run: |
           if [[ "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest> /dev/null)" == "" ]]; then
-            aws cloudwatch put-metric-data --metric-name PullImageFromECRFailure --dimensions result=pass/fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
+            aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
           else
-            aws cloudwatch put-metric-data --metric-name PullImageFromECRFailure --dimensions result=pass/fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
+            aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
           fi
