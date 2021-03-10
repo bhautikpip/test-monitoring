@@ -44,6 +44,7 @@ jobs:
           time: '30s'
 
       - name: Publish metrics on daemon startup
+        if: ${{ always() }}
         run: |
           if [[ "$(docker container inspect -f '{{.State.Status}}' xray-daemon )" != "running" ]]; then
             aws cloudwatch put-metric-data --metric-name DaemonImageStartupFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
