@@ -36,4 +36,4 @@ jobs:
           fi
 
       - name: Run daemon image
-        run: docker run public.ecr.aws/xray/aws-xray-daemon:latest
+        run: docker run public.ecr.aws/xray/aws-xray-daemon:latest -n us-west-2
