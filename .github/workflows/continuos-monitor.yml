@@ -26,6 +26,11 @@ jobs:
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
           docker pull public.ecr.aws/xray/aws-xray-daemon:latest
 
+      - name: debug
+        run: |
+          docker images
+          echo $("$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest11> /dev/null)")
+
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
         run: |
