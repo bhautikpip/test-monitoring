@@ -1,14 +1,13 @@
 name: Continuous Monitoring of Dockerhub and Public ECR
-on:
-  schedule:
-    - cron: "*/1 * * * *"
+on: push
+#  schedule:
+#    - cron: "*/ * * * *"
 
 jobs:
   monitor-ecr:
     name: Monitor Dockerhub and Public ECR
     runs-on: ubuntu-latest
     steps:
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -21,10 +20,8 @@ jobs:
         with:
           registry: public.ecr.aws
 
-      - name: Authenticate and pull an image from public ECR
-        run: |
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-          docker pull public.ecr.aws/xray/aws-xray-daemon:latest
+      - name: Pull an image from public ECR
+        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
