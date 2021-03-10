@@ -24,12 +24,12 @@ jobs:
       - name: Authenticate and pull an image from public ECR
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-          docker pull public.ecr.aws/xray/aws-xray-daemon:latest530
+          docker pull public.ecr.aws/xray/aws-xray-daemon:latest
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
         run: |
-          if [[ "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest> /dev/null)" == "" ]]; then
+          if [[ "$(docker images -q public.ecr.aws/xray/aws-xray-daemon:latest11> /dev/null)" == "" ]]; then
             aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
           else
             echo "hi!"
