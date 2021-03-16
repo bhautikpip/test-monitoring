@@ -1,7 +1,7 @@
 name: Continuous Monitoring of Dockerhub and Public ECR
-on:
-  schedule:
-    - cron:  '0 */6 * * *'
+on: push
+#  schedule:
+#    - cron:  '0 */6 * * *'
 
 jobs:
   monitor-ecr:
@@ -21,7 +21,7 @@ jobs:
           registry: public.ecr.aws
 
       - name: Pull an image from public ECR
-        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest
+        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest123
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
