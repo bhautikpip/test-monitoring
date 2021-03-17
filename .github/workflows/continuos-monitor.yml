@@ -21,7 +21,7 @@ jobs:
           registry: public.ecr.aws
 
       - name: Pull an image from public ECR
-        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest123
+        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
@@ -33,12 +33,10 @@ jobs:
           fi
 
       - name: Run daemon image
-        run: docker run --name xray-daemon public.ecr.aws/xray/aws-xray-daemon:latest -n us-west-2 &
+        run: |
+          docker run --name xray-daemon public.ecr.aws/xray/aws-xray-daemon:latest -n us-west-2 &
+          sleep 30
 
-      - name: Sleep for 30 seconds
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '30s'
 
       - name: Publish metrics on daemon startup
         if: ${{ always() }}
