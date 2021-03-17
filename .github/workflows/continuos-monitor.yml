@@ -16,7 +16,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Pull an image from public ECR
-        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest
+        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest123
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
