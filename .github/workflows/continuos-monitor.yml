@@ -17,7 +17,7 @@ jobs:
 
       - name: Pull an image from public ECR
         id: pull-from-ecr
-        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest123
+        run: docker pull public.ecr.aws/xray/aws-xray-daemon:latest
 
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
