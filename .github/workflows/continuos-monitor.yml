@@ -22,7 +22,7 @@ jobs:
       - name: Publish metrics on pulling an image
         if: ${{ always() }}
         run: |
-          if [[ "$(steps.pull-from-ecr.outcome)" == "failure"  ]]; then
+          if [[ "${{ steps.pull-from-ecr.outcome }}" == "failure"  ]]; then
             aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 1 --timestamp $(date +%s)
           else
             aws cloudwatch put-metric-data --metric-name PullImageFailureFromECR --dimensions test=fail --namespace MonitorDaemon --value 0 --timestamp $(date +%s)
